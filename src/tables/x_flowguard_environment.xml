@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sys_dictionary>
+    <element="x_flowguard_environment">
+    <name>x_flowguard_environment</name>
+    <label>Environment</label>
+    <plural>Environments</plural>
+    <sys_name>x_flowguard_environment</sys_name>
+    <super_class/>
+    <is_extendable>false</is_extendable>
+    <access>public</access>
+    <create_access>true</create_access>
+    <read_access>true</read_access>
+    <update_access>true</update_access>
+    <delete_access>true</delete_access>
+    <fields>
+        <!-- Name: human-readable label like "QA", "Production" -->
+        <sys_dictionary>
+            <element>name</element>
+            <label>Name</label>
+            <type>string</type>
+            <max_length>100</max_length>
+            <mandatory>true</mandatory>
+            <unique>true</unique>
+        </sys_dictionary>
+        <!-- Instance URL: https://dev362841.service-now.com -->
+        <sys_dictionary>
+            <element>instance_url</element>
+            <label>Instance URL</label>
+            <type>string</type>
+            <max_length>255</max_length>
+            <mandatory>true</mandatory>
+            <hint>https://your-instance.service-now.com</hint>
+        </sys_dictionary>
+        <!-- Username for basic auth -->
+        <sys_dictionary>
+            <element>username</element>
+            <label>Username</label>
+            <type>string</type>
+            <max_length>100</max_length>
+            <mandatory>true</mandatory>
+        </sys_dictionary>
+        <!-- Password (encrypted at rest — password2 field type) -->
+        <sys_dictionary>
+            <element>password</element>
+            <label>Password</label>
+            <type>password2</type>
+            <max_length>255</max_length>
+            <mandatory>true</mandatory>
+        </sys_dictionary>
+        <!-- Active flag -->
+        <sys_dictionary>
+            <element>active</element>
+            <label>Active</label>
+            <type>boolean</type>
+            <default_value>true</default_value>
+        </sys_dictionary>
+        <!-- Order for display sorting -->
+        <sys_dictionary>
+            <element>order</element>
+            <label>Order</label>
+            <type>integer</type>
+            <default_value>100</default_value>
+        </sys_dictionary>
+        <!-- Description -->
+        <sys_dictionary>
+            <element>description</element>
+            <label>Description</label>
+            <type>string</type>
+            <max_length>4000</max_length>
+        </sys_dictionary>
+    </fields>
+    <indexes>
+        <sys_index>
+            <element>name</element>
+            <unique>true</unique>
+        </sys_index>
+    </indexes>
+    <application_menu>
+        <module>
+            <title>Environments</title>
+            <table>x_flowguard_environment</table>
+            <order>200</order>
+            <active>true</active>
+        </module>
+    </application_menu>
+</sys_dictionary>

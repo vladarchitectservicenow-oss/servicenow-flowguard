@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sys_rest_endpoint>
+    <name>FlowGuard API</name>
+    <description>FlowGuard — validate, migrate, rollback, diff Flow Designer flows</description>
+    <endpoint>/api/x_flowguard</endpoint>
+    <active>true</active>
+    <authentication_type>basic</authentication_type>
+    <operations>
+        <sys_rest_operation>
+            <name>Validate</name>
+            <http_method>POST</http_method>
+            <http_relative_url>/validate</http_relative_url>
+            <active>true</active>
+            <consumes>application/json</consumes>
+            <produces>application/json</produces>
+            <script>var sourceFlowId = request.body.data.flow_id;
+var targetUrl = request.body.data.target_instance;
+var validator = new FlowGuardValidator();
+var result = validator.validate(sourceFlowId, targetUrl);
+response.setContentType('application/json');
+response.setBody(JSON.stringify(result));</script>
+        </sys_rest_operation>
+        <sys_rest_operation>
+            <name>Migrate</name>
+            <http_method>POST</http_method>
+            <http_relative_url>/migrate</http_relative_url>
+            <active>true</active>
+            <consumes>application/json</consumes>
+            <produces>application/json</produces>
+            <script>var sourceId = request.body.data.flow_id;
+var targetUrl = request.body.data.target_instance;
+var userId = gs.getUserID();
+var migrator = new FlowGuardMigrator();
+var result = migrator.migrate(sourceId, targetUrl, userId);
+response.setContentType('application/json');
+response.setBody(JSON.stringify(result));</script>
+        </sys_rest_operation>
+        <sys_rest_operation>
+            <name>Rollback</name>
+            <http_method>POST</http_method>
+            <http_relative_url>/rollback</http_relative_url>
+            <active>true</active>
+            <consumes>application/json</consumes>
+            <produces>application/json</produces>
+            <script>var migrationId = request.body.data.migration_id;
+var migrator = new FlowGuardMigrator();
+var result = migrator.rollback(migrationId);
+response.setContentType('application/json');
+response.setBody(JSON.stringify(result));</script>
+        </sys_rest_operation>
+        <sys_rest_operation>
+            <name>Diff</name>
+            <http_method>GET</http_method>
+            <http_relative_url>/diff</http_relative_url>
+            <active>true</active>
+            <produces>application/json</produces>
+            <script>var flowId = request.queryParams.flow_id;
+if (!flowId) { response.setBody(JSON.stringify({error: 'flow_id required'})); return; }
+var migrator = new FlowGuardMigrator();
+var result = migrator.diff(flowId);
+response.setContentType('application/json');
+response.setBody(JSON.stringify(result));</script>
+        </sys_rest_operation>
+        <sys_rest_operation>
+            <name>Cross-Environment Validate</name>
+            <http_method>POST</http_method>
+            <http_relative_url>/cross-validate</http_relative_url>
+            <active>true</active>
+            <consumes>application/json</consumes>
+            <produces>application/json</produces>
+            <script>var sourceFlowId = request.body.data.flow_id;
+if (!sourceFlowId) {
+    response.setContentType('application/json');
+    response.setBody(JSON.stringify({error: 'flow_id required'}));
+    return;
+}
+var validator = new FlowGuardCrossEnvValidator();
+var result = validator.validateAllEnvironments(sourceFlowId);
+response.setContentType('application/json');
+response.setBody(JSON.stringify(result));</script>
+        </sys_rest_operation>
+    </operations>
+</sys_rest_endpoint>
